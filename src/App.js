@@ -1,19 +1,46 @@
 import React, {Component} from 'react';
 import Map from './Map.js';
 import Sidebar from './Sidebar.js';
-import escapeRegExp from 'escape-string-regexp';
-
-
-const forts = [
-  {name:"Minčeta Tower",image:"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Casco_viejo_de_Dubrovnik%2C_Croacia%2C_2014-04-13%2C_DD_18.JPG/450px-Casco_viejo_de_Dubrovnik%2C_Croacia%2C_2014-04-13%2C_DD_18.JPG",latitude:42.643165,longitude:18.108311},
-  {name:"Fort Bokar",image:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Dubrovnik-muralles.jpg/300px-Dubrovnik-muralles.jpg",latitude:42.6410909,longitude: 18.105932},
-  {name:"St. John Fortress",image:"https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Dubrovnik%2C_am_alten_Stadthafen_IMG_8169.jpg/300px-Dubrovnik%2C_am_alten_Stadthafen_IMG_8169.jpg", latitude:42.64014,longitude:18.1123283},
-  {name:"Revelin Fortress",image:"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Revelin_LS4.JPG/330px-Revelin_LS4.JPG",latitude:42.642351,longitude:18.112242},
-  {name:"St. Lawrence Fortress",image:"https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Fort_Lovrijenac%2CDubrovnik%2CCroatia.jpg/375px-Fort_Lovrijenac%2CDubrovnik%2CCroatia.jpg",latitude:42.640959,longitude:18.104284}
-]
 
 export default class App extends Component {
+  constructor() {
+     super();
+     this.isFilteringForts = this.isFilteringForts.bind(this);
+   }
 
+   state = {
+     forts : [
+       {id: "1", name:"Minčeta Tower", latitude:42.643165, longitude:18.108311},
+       {id: "2", name:"Fort Bokar", latitude:42.6410909, longitude: 18.105932},
+       {id: "3", name:"St. John Fortress", latitude:42.64014, longitude:18.1123283},
+       {id: "4", name:"Revelin Fortress", latitude:42.642351, longitude:18.112242},
+       {id: "5", name:"St. Lawrence Fortress", latitude:42.640959, longitude:18.104284}
+     ],
+     marker: [],
+     filteredForts: [],
+     filteredMarkers: [],
+   }
+
+   componentDidMount() {
+      this.isFilteringForts();
+   }
+
+   isFilteringForts(updatedForts) {
+      this.setState({
+        filteredForts: updatedForts
+      });
+   }
+
+   handleOnClick = (event) => {
+      this.setState({activeMarker: event.target.id})
+      this.setState({filteredMarkers: []})
+   }
+
+   handleOnChange = (event) => {
+      const filteredMarkers = this.state.forts[event.target.value]
+      this.setState({activeMarker: event.target.value})
+      this.setState({filteredMarkers})
+   }
 
   render() {
 
@@ -21,14 +48,21 @@ export default class App extends Component {
     return (
       <div>
       <Map
-        viewport= {this.props.viewport}
-
+         forts={this.state.forts}
+         activeMarker={this.state.activeMarker}
+         handleOnChange={this.handleOnChange}
+         handleOnClick={this.handleOnClick}
       />
        <Sidebar
-      
+          forts={this.state.forts}
+          filteredForts={this.state.filteredForts}
+          isFilteringForts={this.isFilteringForts}
+          activeMarker={this.state.activeMarker}
+          filteredMarkers={this.state.filteredMarkers}
+          handleOnChange={this.handleOnChange}
+          handleOnClick={this.handleOnClick}    
       />
       </div>
     );
   }
-
 }
