@@ -16,12 +16,15 @@ export default class Sidebar extends Component {
 }
 
   render() {
+    const { activeMarker } = this.props
 
-      let filteredForts = this.props.forts.filter(
-        (fort) => {
-          return fort.name.indexOf(this.state.search) !== -1;
-        }
-      );
+    let filteredForts = this.props.forts.filter(fort => {
+         return (
+           fort.name
+             .toLowerCase()
+             .indexOf(this.state.search.toLowerCase()) !== -1
+         );
+       });
 
     return (
 
@@ -33,7 +36,7 @@ export default class Sidebar extends Component {
          </div>
          <ol className="forts">
            {filteredForts.map((fort) => {
-             return <li a href="#"> fort={fort}</li>
+             <li><button handleOnClick={this.props.handleOnClick} handleOnChange={this.props.handleOnChange} activeMarker={this.props.activeMarker}>{fort.name}</button></li>
            })}
          </ol>
       </div>
