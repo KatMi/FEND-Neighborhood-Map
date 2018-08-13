@@ -32,11 +32,11 @@ export default class Sidebar extends Component {
         <h1 className="App-title">Dubrovnik City Walls</h1>
         <div className="input-wrapper">
          <input type="text" placeholder="Filter forts"
-         value={this.state.search} onChange={this.updateSearch.bind(this)}/>
+         value={this.state.search} onChange={this.updateSearch.bind(this)} handleOnChange={this.props.handleOnChange}/>
          </div>
          <ol className="forts">
            {filteredForts.map((fort) => {
-             <li><button handleOnClick={this.props.handleOnClick} handleOnChange={this.props.handleOnChange} activeMarker={this.props.activeMarker}>{fort.name}</button></li>
+             <li><button handleOnClick={this.props.handleOnClick} activeMarker={this.props.activeMarker}>{fort.name}</button></li>
            })}
          </ol>
       </div>
