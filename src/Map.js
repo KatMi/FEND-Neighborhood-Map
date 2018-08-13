@@ -4,7 +4,7 @@ import MapGL, { Marker, Popup, NavigationControl} from 'react-map-gl';
 import InfoWindow from './InfoWindow.js';
 import Forts from './forts.json';
 
-const token = 'pk.eyJ1Ijoia2F0bWkiLCJhIjoiY2praDFsa3lrMG5oZTNscWg1ZWxoNTlsaiJ9.fNB821wIXlOewI0sAbkuQw'; // Set your mapbox token here
+const token = 'pk.eyJ1Ijoia2F0bWkiLCJhIjoiY2praDFsa3lrMG5oZTNscWg1ZWxoNTlsaiJ9.fNB821wIXlOewI0sAbkuQw';
 
 const navControlStyle = {
   position: 'absolute',
@@ -34,13 +34,14 @@ export default class Map extends Component {
         height: 500,
       },
       infoWindow: null,
-      size: 30
     };
   }
 
 componentDidMount() {
     window.addEventListener('resize', this.resizeMap);
+    window.addEventListener('click', this.toggleMenu);
     this.resizeMap();
+    this.toggleMenu();
   }
 
   resizeMap = () => {
@@ -48,7 +49,7 @@ componentDidMount() {
       viewport: {
         ...this.state.viewport,
         width: window.innerWidth,
-        height:  window.innerHeight
+        height: window.innerHeight
       }
 
     });
@@ -73,11 +74,21 @@ componentDidMount() {
 
 
   renderMarker = (fort, index) => {
+    let isActive = false
+
+    if (this.props.forts.id === this.props.activeMarker) {
+      isActive = true;
+    }
+    
     return (
-      <Marker key={`marker-${index}`}
+      <Marker key={fort.id}
         longitude={fort.longitude}
         latitude={fort.latitude} >
-        <img src="https://image.flaticon.com/icons/svg/90/90389.svg" alt="fort icon" height={this.state.size} onClick={() => this.setState({infoWindow: fort})} />
+        {isActive ? (
+           <img src="https://image.flaticon.com/icons/svg/90/90389.svg" alt="fort icon" height={50} onClick={() => this.setState({infoWindow: fort})} />
+        ) : (
+           <img src="https://image.flaticon.com/icons/svg/90/90389.svg" alt="fort icon" height={30} onClick={() => this.setState({infoWindow: fort})}/>
+        )}
       </Marker>
     );
   }
