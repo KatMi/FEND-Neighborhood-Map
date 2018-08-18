@@ -11,6 +11,7 @@ export default class Sidebar extends Component {
     }
   }
 
+  // search function taken from: https://www.youtube.com/watch?v=OlVkYnVXPl0
   updateSearch(event) {
   this.setState({search: event.target.value.substr(0, 20)});
 }
